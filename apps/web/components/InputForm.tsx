@@ -32,7 +32,7 @@ export function InputForm() {
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/tests`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/tests`,
         {
           method: "POST",
           headers: {
