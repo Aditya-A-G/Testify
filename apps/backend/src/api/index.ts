@@ -9,5 +9,16 @@ router.get<{}, MessageResponse>('/', (req, res) => {
   });
 });
 
+router.post('/tests', (req, res)=>{
+  console.log(req.body);
+  
+  const websiteUrl = req.body;
+
+  console.log('websiteUrl', websiteUrl);
+  
+  res.json({
+    message: "it's working"
+  })
+})
 
 export default router;
