@@ -1,24 +1,40 @@
-import express from 'express';
-import MessageResponse from '../interfaces/MessageResponse';
+import express from "express";
+import { v4 as uuidv4 } from "uuid";
+import MessageResponse from "../interfaces/MessageResponse";
+import { sendToRegionQueue } from "../config/queue";
+import { redis } from "../config/redis";
+import { JobModel } from "./models/jobModel";
 
 const router = express.Router();
 
-router.get<{}, MessageResponse>('/', (req, res) => {
+router.get<{}, MessageResponse>("/", (req, res) => {
   res.json({
-    message: 'API - 👋🌎🌍🌏',
+    message: "API - 👋🌎🌍🌏",
   });
 });
 
-router.post('/tests', (req, res)=>{
-  console.log(req.body);
-  
-  const websiteUrl = req.body;
+router.post("/tests", async (req, res) => {
+  const { websiteUrl, region } = req.body;
+  const jobId = uuidv4();
 
-  console.log('websiteUrl', websiteUrl);
-  
+  const newJob = new JobModel({
+    jobId,
+    websiteUrl,
+    region,
+    status: "pending",
+    testType: "performanceTest",
+  });
+
+  await newJob.save();
+
+  await redis.set(jobId, "pending");
+
+  await sendToRegionQueue(region, websiteUrl);
+
   res.json({
-    message: "it's working"
-  })
-})
+    jobId: jobId,
+    status: "pending",
+  });
+});
 
 export default router;

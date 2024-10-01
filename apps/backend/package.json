@@ -16,6 +16,7 @@
   "author": "adityaghadge360@gmail.com",
   "dependencies": {
     "@types/amqplib": "^0.10.5",
+    "@types/uuid": "^10.0.0",
     "@upstash/redis": "^1.34.0",
     "amqplib": "^0.10.4",
     "cors": "^2.8.5",
@@ -23,7 +24,8 @@
     "express": "^4.21.0",
     "helmet": "^7.1.0",
     "mongoose": "^8.7.0",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
