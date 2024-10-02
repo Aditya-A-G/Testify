@@ -25,15 +25,15 @@ async function connectRabbitMQ() {
   return { connection, channel };
 }
 
-export async function sendToRegionQueue(region: keyof typeof regionQueues, message: string) {
+export async function sendToRegionQueue(region: keyof typeof regionQueues, payload: {jobId: string, websiteUrl: string}) {
   const { channel } = await connectRabbitMQ();
 
   const queueName = regionQueues[region];
 
   await channel.assertQueue(queueName, { durable: true });
 
-  channel.sendToQueue(queueName, Buffer.from(message), { persistent: true });
+  channel.sendToQueue(queueName, Buffer.from(JSON.stringify(payload)), { persistent: true });
 
-  console.log(`Sent message to ${queueName}: ${message}`);
+  console.log(`Sent message to ${queueName}: ${payload}`);
 }
 
