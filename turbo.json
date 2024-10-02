@@ -6,7 +6,7 @@
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": [".next/**", "!.next/cache/**"],
-      "env": ["NEXT_PUBLIC_BACKEND_URL", "MONGO_DB", "REDIS", "REDIS_TOKEN", "AMQP"]
+      "env": ["NEXT_PUBLIC_BACKEND_URL", "MONGO_DB", "REDIS", "REDIS_TOKEN", "AMQP", "BACKEND_URL"]
     },
     "lint": {
       "dependsOn": ["^lint"]
