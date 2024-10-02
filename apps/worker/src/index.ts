@@ -5,12 +5,12 @@ dotenv.config();
 
 let connection: amqp.Connection;
 let channel: amqp.Channel;
+let REGION_QUEUE = process.argv[2];
 const prefetchCount = 1;
-const REGION_QUEUE = process.argv[2];
 
 if (!REGION_QUEUE) {
-  console.error("Please provide a region queue name as an argument.");
-  process.exit(1);
+  console.error("No region queue name as an argument provided. using india_queue");
+  REGION_QUEUE = "india_queue"
 }
 
 async function connectRabbitMQ() {
