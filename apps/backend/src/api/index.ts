@@ -29,7 +29,7 @@ router.post("/tests", async (req, res) => {
 
   await redis.set(jobId, "pending");
 
-  await sendToRegionQueue(region, websiteUrl);
+  await sendToRegionQueue(region, { jobId, websiteUrl });
 
   res.json({
     jobId: jobId,
