@@ -1,5 +1,6 @@
 require('dotenv').config();
 
+export const REDIS_EXPIRY_TIME = 3600;
 export const MONGO_DB = process.env.MONGO_DB
 export const REDIS = process.env.REDIS
 export const REDIS_TOKEN = process.env.REDIS_TOKEN;
