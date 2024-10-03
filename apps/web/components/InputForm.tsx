@@ -165,7 +165,7 @@ export function InputForm() {
           control={form.control}
           name="websiteUrl"
           render={({ field }) => (
-            <FormItem className="flex-grow">
+            <FormItem className="flex-grow flex-shrink-0">
               <FormControl>
                 <Input placeholder="https://adityacodes.tech" {...field} />
               </FormControl>
