@@ -172,6 +172,7 @@ router.get("/tests/:id/results", async (req, res) => {
   } catch (error) {
     console.error("Error fetching job results:", error);
     res.status(500).json({
+      status: "error",
       message: "Failed to fetch job results",
       error: error,
     });
