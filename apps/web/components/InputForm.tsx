@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/popover";
 
 import { Input } from "@/components/ui/input";
+import { useEffect, useState } from "react";
 
 const regions = [
   { label: "us", value: "us" },
@@ -55,6 +56,9 @@ export function InputForm() {
     },
   });
 
+  const [jobId, setJobId] = useState<string | null>(null);
+  const [polling, setPolling] = useState<boolean>(false);
+
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     try {
       const response = await fetch(
@@ -71,6 +75,11 @@ export function InputForm() {
       if (!response.ok) {
         throw new Error("Failed to submit URL");
       }
+
+      const result = await response.json();
+
+      setJobId(result.jobId);
+      setPolling(true);
 
       toast({
         title: "Success!",
@@ -93,6 +102,58 @@ export function InputForm() {
       }
     }
   }
+
+  useEffect(() => {
+    let intervalId: NodeJS.Timeout;
+
+    async function checkTestResult() {
+      if (!jobId || !polling) return;
+
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/tests/${jobId}/results`
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch test results");
+        }
+
+        const data = await response.json();
+
+        if (data.status === "completed") {
+          console.log("Test completed");
+          toast({
+            title: "Test Completed",
+            description: "Test result is ready.",
+          });
+          setPolling(false);
+        } else if (data.status === "pending") {
+          console.log("Test is pending");
+        } else if (data.status === "failed") {
+          console.log("Test failed");
+          setPolling(false);
+          toast({
+            variant: "destructive",
+            title: "Test Failed",
+            description: "Please try again later.",
+          });
+        } else if (data.status === "not found") {
+          console.log(data.message);
+        } else if (data.status === "error") {
+          console.log(data.message);
+          setPolling(false);
+        }
+      } catch (error) {
+        console.error("Error during polling:", error);
+        setPolling(false);
+      }
+    }
+
+    if (polling) {
+      intervalId = setInterval(checkTestResult, 12000);
+    }
+    return () => clearInterval(intervalId);
+  }, [jobId, polling]);
 
   return (
     <Form {...form}>
