@@ -30,6 +30,7 @@ import {
 
 import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
+import { Result } from "@/app/page";
 
 const regions = [
   { label: "us", value: "us" },
@@ -47,7 +48,11 @@ const FormSchema = z.object({
   }),
 });
 
-export function InputForm() {
+export function InputForm({
+  setResult,
+}: {
+  setResult: (result: Result) => void;
+}) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -121,11 +126,11 @@ export function InputForm() {
         const data = await response.json();
 
         if (data.status === "completed") {
-          console.log("Test completed");
           toast({
             title: "Test Completed",
             description: "Test result is ready.",
           });
+          setResult(data.result);
           setPolling(false);
         } else if (data.status === "pending") {
           console.log("Test is pending");
@@ -231,7 +236,7 @@ export function InputForm() {
             </FormItem>
           )}
         />
-        <Button type="submit" className="px-10">
+        <Button type="submit" className="px-10" disabled={polling}>
           Test
         </Button>
       </form>
