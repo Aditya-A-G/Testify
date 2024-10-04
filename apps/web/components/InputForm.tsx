@@ -7,6 +7,7 @@ import { z } from "zod";
 import { toast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Check, ChevronsUpDown } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
 import {
   Form,
   FormControl,
@@ -63,6 +64,7 @@ export function InputForm({
 
   const [jobId, setJobId] = useState<string | null>(null);
   const [polling, setPolling] = useState<boolean>(false);
+  const [progressValue, setProgressValue] = useState(79);
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     try {
@@ -131,6 +133,7 @@ export function InputForm({
             description: "Test result is ready.",
           });
           setResult(data.result);
+          setProgressValue(100);
           setPolling(false);
         } else if (data.status === "pending") {
           console.log("Test is pending");
@@ -240,6 +243,11 @@ export function InputForm({
           Test
         </Button>
       </form>
+      {polling && (
+        <div className="w-full flex justify-center mt-8">
+          <Progress value={progressValue} className="w-[60%]" />
+        </div>
+      )}
     </Form>
   );
 }
