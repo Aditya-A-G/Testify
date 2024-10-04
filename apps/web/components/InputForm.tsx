@@ -52,7 +52,7 @@ export function InputForm() {
     resolver: zodResolver(FormSchema),
     defaultValues: {
       websiteUrl: "",
-      region: "us",
+      region: "india",
     },
   });
 
