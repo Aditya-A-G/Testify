@@ -40,7 +40,9 @@ async function closeBrowser() {
 
 async function connectRabbitMQ() {
   if (!connection) {
-    connection = await amqp.connect(AMQP);
+    connection = await amqp.connect(AMQP, {
+      heartbeat: 10,
+    });
     console.log("RabbitMQ connection established");
   }
 
@@ -69,21 +71,35 @@ async function testWebsitePerformance(websiteUrl: string) {
 
     let totalSize = 0;
     page.on("response", async (response) => {
-      const status = response.status();
-      if (status >= 300 && status < 400) {
-        console.log(`Redirect response: ${status} to ${response.url()}`);
-        return;
+      try {
+        const status = response.status();
+        if (status >= 300 && status < 400) {
+          console.log(`Redirect response: ${status} to ${response.url()}`);
+          return;
+        }
+
+        if (
+          response.headers()["content-length"] === "0" ||
+          response.headers()["content-type"]?.startsWith("image") ||
+          response.headers()["content-type"]?.startsWith("text/html")
+        ) {
+          console.log(`Skipping response body for ${response.url()}`);
+          return;
+        }
+
+        const buffer = await response.buffer();
+        totalSize += buffer.length;
+      } catch (error) {
+        console.error("Something went wrong");
       }
-      const buffer = await response.buffer();
-      totalSize += buffer.length;
     });
 
-    await page.goto(websiteUrl, { waitUntil: "networkidle0", timeout: 60000 });
+    await page.goto(websiteUrl, { waitUntil: "networkidle0", timeout: 120000 });
 
     const performanceTiming = await page.evaluate(() =>
       JSON.stringify(window.performance.timing)
     );
-    
+
     const metrics = JSON.parse(performanceTiming);
 
     const loadTime = metrics.loadEventEnd - metrics.navigationStart;
