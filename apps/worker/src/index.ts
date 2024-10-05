@@ -96,7 +96,7 @@ async function testWebsitePerformance(websiteUrl: string) {
       }
     });
 
-    await page.goto(websiteUrl, { waitUntil: "networkidle0", timeout: 120000 });
+    await page.goto(websiteUrl, { waitUntil: "networkidle0", timeout: 300000 });
 
     const performanceTiming = await page.evaluate(() =>
       JSON.stringify(window.performance.timing)
