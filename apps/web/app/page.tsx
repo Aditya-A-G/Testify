@@ -1,6 +1,6 @@
 "use client";
 import { InputForm } from "@/components/InputForm";
-import { Clock, Download, FileText, Zap } from "lucide-react";
+import { Clock, Download, FileText, Zap, Globe, Wifi } from "lucide-react";
 
 import { useState } from "react";
 
@@ -132,10 +132,29 @@ export default function Home() {
     <div className="py-12 flex flex-col justify-center items-center w-full">
       <InputForm setResult={setResult} />
       {result && (
-        <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 w-full p-8">
-          {metrics.map((metric) => (
-            <MetricCard key={metric.name} metric={metric} />
-          ))}
+        <div className="w-full p-8">
+          <div className="mb-8">
+            <h2 className="text-3xl font-bold mb-4">Results</h2>
+            <div className="flex-col justify-center mb-4">
+              <div className="flex items-center gap-1 mb-2 sm:mb-0 text-lg ">
+                <span className="font-semibold">Region: </span> {result.region}
+                <Globe className="mr-2 h-5 w-5 text-muted-foreground" />
+              </div>
+              <div className="flex items-center gap-1 text-lg">
+                <span className="font-semibold">Network:</span>  Slow 4G
+                <Wifi className="mr-2 h-5 w-5 text-muted-foreground" />
+              </div>
+              <div className="text-lg">
+                <span className="font-semibold">Tested URL:</span>{" "}
+                {result.websiteUrl}
+              </div>
+            </div>
+          </div>
+          <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 w-full p-8">
+            {metrics.map((metric) => (
+              <MetricCard key={metric.name} metric={metric} />
+            ))}
+          </div>
         </div>
       )}
     </div>
