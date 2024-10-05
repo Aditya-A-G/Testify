@@ -19,7 +19,7 @@ app.use(
     origin:
       NODE_ENV === "production"
         ? "https://testify.adityacodes.tech"
-        : "http://localhost:300",
+        : "http://localhost:3000",
   })
 );
 app.use(express.json());
