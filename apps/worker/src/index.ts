@@ -28,7 +28,7 @@ async function initBrowser() {
   if (!browser) {
     browser = await puppeteer.launch({
       headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
     console.log("Browser instance initialized");
   }
@@ -195,10 +195,14 @@ async function startWorker() {
       REGION_QUEUE,
       async (msg) => {
         if (msg !== null) {
-          const { jobId, websiteUrl } = JSON.parse(msg.content.toString());
-          console.log(`Received message from ${REGION_QUEUE}: ${websiteUrl}`);
+          let jobId, websiteUrl;
 
           try {
+            const data = JSON.parse(msg.content.toString());
+            jobId = data.jobId;
+            websiteUrl = data.websiteUrl;
+
+            console.log(`Received message from ${REGION_QUEUE}: ${websiteUrl}`);
             const result = await testWebsitePerformance(websiteUrl);
 
             channel.ack(msg);
