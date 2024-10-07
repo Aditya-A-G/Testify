@@ -27,6 +27,7 @@ interface PaintMetrics {
 async function initBrowser() {
   if (!browser) {
     browser = await puppeteer.launch({
+      headless: true,
       args: ["--no-sandbox"]
     });
     console.log("Browser instance initialized");
@@ -98,7 +99,7 @@ async function testWebsitePerformance(websiteUrl: string) {
       }
     });
 
-    await page.goto(websiteUrl, { waitUntil: "networkidle0", timeout: 200000 });
+    await page.goto(websiteUrl, { waitUntil: "networkidle0", timeout: 300000 });
 
     const performanceTiming = await page.evaluate(() =>
       JSON.stringify(window.performance.timing)
