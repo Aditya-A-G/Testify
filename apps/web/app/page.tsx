@@ -148,6 +148,10 @@ export default function Home() {
                 <span className="font-semibold">Tested URL:</span>{" "}
                 {result.websiteUrl}
               </div>
+              <div className="text-lg">
+                <span className="font-semibold">Note:</span>{" "}
+                Results may vary and are influenced by multiple factors.
+              </div>
             </div>
           </div>
           <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 w-full md:p-8">
