@@ -27,8 +27,6 @@ interface PaintMetrics {
 async function initBrowser() {
   if (!browser) {
     browser = await puppeteer.launch({
-      headless: true,
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
     console.log("Browser instance initialized");
   }
@@ -68,36 +66,38 @@ async function testWebsitePerformance(websiteUrl: string) {
 
   try {
     let requestCount = 0;
-    page.on("request", () => {
+    page.on("request", (request) => {
       requestCount++;
     });
 
     let totalSize = 0;
     page.on("response", async (response) => {
       try {
+        const request = response.request();
+
+        if (request.method() !== "GET") return;
+
         const status = response.status();
         if (status >= 300 && status < 400) {
           console.log(`Redirect response: ${status} to ${response.url()}`);
           return;
         }
 
-        if (
-          response.headers()["content-length"] === "0" ||
-          response.headers()["content-type"]?.startsWith("image") ||
-          response.headers()["content-type"]?.startsWith("text/html")
-        ) {
-          console.log(`Skipping response body for ${response.url()}`);
+        if (response.headers()["content-length"] === "0") {
+          console.log(
+            `Skipping zero-content-length response for ${response.url()}`
+          );
           return;
         }
 
         const buffer = await response.buffer();
         totalSize += buffer.length;
       } catch (error) {
-        console.error("Something went wrong");
+        console.error("Something went wrong", error);
       }
     });
 
-    await page.goto(websiteUrl, { waitUntil: "networkidle0", timeout: 300000 });
+    await page.goto(websiteUrl, { waitUntil: "networkidle0", timeout: 200000 });
 
     const performanceTiming = await page.evaluate(() =>
       JSON.stringify(window.performance.timing)
