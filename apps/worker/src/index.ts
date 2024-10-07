@@ -27,6 +27,7 @@ interface PaintMetrics {
 async function initBrowser() {
   if (!browser) {
     browser = await puppeteer.launch({
+      args: ["--no-sandbox"]
     });
     console.log("Browser instance initialized");
   }
