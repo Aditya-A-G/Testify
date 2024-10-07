@@ -167,7 +167,7 @@ export function InputForm({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="w-2/4 space-x-4 flex items-start"
+        className="w-11/12 md:w-2/4 space-y-4 md:space-x-4 md:space-y-0 flex flex-col  md:flex-row md:items-start"
       >
         <FormField
           control={form.control}
@@ -193,7 +193,7 @@ export function InputForm({
                       variant="outline"
                       role="combobox"
                       className={cn(
-                        "w-[200px] justify-between",
+                        "w-full md:w-[200px] justify-between",
                         !field.value && "text-muted-foreground"
                       )}
                     >
