@@ -76,8 +76,8 @@ export function MetricCard({ metric }: { metric: Metric }) {
             height={96}
             cx={48}
             cy={48}
-            innerRadius={30}
-            outerRadius={48}
+            innerRadius={40}
+            outerRadius={58}
             barSize={10}
             data={data}
             startAngle={180}
@@ -96,8 +96,8 @@ export function MetricCard({ metric }: { metric: Metric }) {
               {metric.value <= metric.goodThreshold && "Good"}
               {metric.value > metric.goodThreshold &&
                 metric.value <= metric.warningThreshold &&
-                "Ok"}
-              {metric.value > metric.warningThreshold && "Bad"}
+                "Fair"}
+              {metric.value > metric.warningThreshold && "Lacking"}
             </div>
           </div>
         </div>
