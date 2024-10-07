@@ -141,7 +141,7 @@ export default function Home() {
                 <Globe className="mr-2 h-5 w-5 text-muted-foreground" />
               </div>
               <div className="flex items-center gap-1 text-lg">
-                <span className="font-semibold">Network:</span> Slow 4G
+                <span className="font-semibold">Network:</span> Fast 4G
                 <Wifi className="mr-2 h-5 w-5 text-muted-foreground" />
               </div>
               <div className="text-lg">

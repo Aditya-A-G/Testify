@@ -64,7 +64,7 @@ async function testWebsitePerformance(websiteUrl: string) {
 
   const page = await browser.newPage();
 
-  await page.emulateNetworkConditions(PredefinedNetworkConditions["Slow 4G"]);
+  await page.emulateNetworkConditions(PredefinedNetworkConditions["Fast 4G"]);
 
   try {
     let requestCount = 0;
