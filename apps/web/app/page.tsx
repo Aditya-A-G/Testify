@@ -150,7 +150,7 @@ export default function Home() {
               </div>
               <div className="text-lg">
                 <span className="font-semibold">Note:</span>{" "}
-                Results may vary and are influenced by multiple factors.
+                Results may vary and are influenced by multiple factors. Run same test 2 times for better results.
               </div>
             </div>
           </div>
