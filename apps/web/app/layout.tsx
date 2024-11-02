@@ -55,7 +55,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <main>{children}</main>
+        {/* <main>{children}</main> */}
+        <div className="w-full h-[90vh] flex justify-center items-center">
+        <h1 className="text-3xl text-center">Our service is temporarily down for maintenance and will be back online in a few hours. Thank you for your patience.</h1>
+
+        </div>
         <Toaster />
         <Analytics />
       </body>
