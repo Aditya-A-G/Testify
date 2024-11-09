@@ -34,10 +34,10 @@ import { useEffect, useState } from "react";
 import { Result } from "@/app/page";
 
 const regions = [
-  { label: "us", value: "us" },
-  { label: "eu", value: "eu" },
-  { label: "asia", value: "asia" },
   { label: "india", value: "india" },
+  { label: "us", value: "us" },
+  // { label: "eu", value: "eu" },
+  // { label: "asia", value: "asia" },
 ] as const;
 
 const FormSchema = z.object({
