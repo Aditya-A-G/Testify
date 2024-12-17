@@ -36,14 +36,22 @@ import { Result } from "@/app/page";
 const regions = [
   { label: "india", value: "india" },
   { label: "us", value: "us" },
-  // { label: "eu", value: "eu" },
-  // { label: "asia", value: "asia" },
 ] as const;
 
 const FormSchema = z.object({
-  websiteUrl: z.string().url({
-    message: "Please enter a valid URL.",
-  }),
+  websiteUrl: z
+    .string()
+    .trim()
+    .transform((url) => {
+      return url.startsWith("http://") || url.startsWith("https://")
+        ? url
+        : `https://${url}`;
+    })
+    .pipe(
+      z.string().url({
+        message: "Please enter a valid URL.",
+      })
+    ),
   region: z.string({
     required_error: "Please select a region",
   }),
@@ -175,7 +183,7 @@ export function InputForm({
           render={({ field }) => (
             <FormItem className="flex-grow flex-shrink-0">
               <FormControl>
-                <Input placeholder="https://adityacodes.tech" {...field} />
+                <Input placeholder="adityacodes.tech" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
