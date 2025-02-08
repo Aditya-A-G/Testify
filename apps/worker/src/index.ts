@@ -80,7 +80,7 @@ async function testWebsitePerformance(websiteUrl: string) {
         if (request.method() !== "GET") return;
 
         const status = response.status();
-        if (status >= 300 && status < 400) {
+        if (status === 308) {
           console.log(`Redirect response: ${status} to ${response.url()}`);
           return;
         }
@@ -99,7 +99,7 @@ async function testWebsitePerformance(websiteUrl: string) {
       }
     });
 
-    await page.goto(websiteUrl, { waitUntil: "networkidle0", timeout: 300000 });
+    await page.goto(websiteUrl, { waitUntil: "load", timeout: 300000 });
 
     const performanceTiming = await page.evaluate(() =>
       JSON.stringify(window.performance.timing)
