@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import {
   Shield,
   Zap,
@@ -14,21 +16,20 @@ import { toast } from "@/hooks/use-toast";
 import { Result } from "@/app/page";
 
 const RecentTests = () => {
-  const recentTests = [
-    {
-      url: "example.com",
-      region: "india",
-      loadTime: "1.2s",
-      timestamp: "2m ago",
-    },
-    { url: "test.org", region: "us", loadTime: "0.8s", timestamp: "5m ago" },
-    {
-      url: "demo.net",
-      region: "india",
-      loadTime: "1.5s",
-      timestamp: "15m ago",
-    },
-  ];
+  const [recentTests, setRecentTests] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchRecentTests = async () => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/recent-tests`
+      );
+      const data = await response.json();
+      setRecentTests(data.recentTests);
+    };
+
+    const intervalId = setInterval(fetchRecentTests, 60000);
+    return () => clearInterval(intervalId);
+  }, []);
 
   return (
     <div className="w-full">
@@ -39,20 +40,18 @@ const RecentTests = () => {
         </span>
       </div>
       <ScrollArea className="h-[120px]">
-        {recentTests.map((test, i) => (
+        {recentTests.map((test) => (
           <div
-            key={i}
+            key={test.id}
             className="flex items-center justify-between py-2 border-b last:border-0"
           >
             <div className="flex items-center">
               <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse" />
-              <span className="text-sm font-medium">{test.url}</span>
+              <span className="text-sm font-medium">{test.websiteUrl}</span>
             </div>
             <div className="flex items-center gap-4 text-sm">
-              <span className="text-muted-foreground capitalize">
-                {test.region}
-              </span>
-              <span className="font-medium">{test.loadTime}</span>
+              <span className="text-muted-foreground">{test.region}</span>
+              <span className="font-medium">{test.loadTime} ms</span>
             </div>
           </div>
         ))}
@@ -60,7 +59,7 @@ const RecentTests = () => {
     </div>
   );
 };
-// inputForm and results are compoentns
+
 interface ModernLandingProps {
   children: React.ReactNode;
   results?: React.ReactNode;
