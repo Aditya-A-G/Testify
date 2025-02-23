@@ -116,7 +116,6 @@ function getProgressValue(metric: Metric): { progress: number; label: string } {
 
 export default function MetricCard({ metric }: { metric: Metric }) {
   const config = getStatusConfig(metric);
-  const percentage = (metric.value / metric.max) * 100;
   const { progress, label } = getProgressValue(metric);
 
   return (

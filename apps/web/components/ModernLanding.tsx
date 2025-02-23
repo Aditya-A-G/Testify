@@ -51,8 +51,9 @@ const RecentTests = () => {
               <span className="text-sm font-medium">{test.websiteUrl}</span>
             </div>
             <div className="flex items-center gap-4 text-sm">
+              <span className="font-medium">{test.loadTime}</span>
               <span className="text-muted-foreground">{test.region}</span>
-              <span className="font-medium">{test.loadTime} ms</span>
+              <span className="text-muted-foreground">{test.timestamp}</span>
             </div>
           </div>
         ))}
