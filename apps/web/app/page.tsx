@@ -4,7 +4,8 @@ import { Clock, Download, FileText, Zap, Globe, Wifi } from "lucide-react";
 
 import { useState } from "react";
 
-import { MetricCard } from "@/components/MetricCard";
+import MetricCard from "@/components/MetricCard";
+import ModernLanding from "@/components/ModernLanding";
 
 export interface Result {
   region: string;
@@ -128,39 +129,17 @@ export default function Home() {
       ]
     : [];
 
-  return (
-    <div className="py-12 flex flex-col justify-center items-center w-full">
-      <InputForm setResult={setResult} />
-      {result && (
-        <div className="w-full p-8">
-          <div className="mb-4">
-            <h2 className="text-3xl font-bold mb-8 w-full text-center">Results</h2>
-            <div className="flex-col justify-center mb-4">
-              <div className="flex items-center gap-1 mb-2 sm:mb-0 text-lg ">
-                <span className="font-semibold">Region: </span> {result.region}
-                <Globe className="mr-2 h-5 w-5 text-muted-foreground" />
-              </div>
-              <div className="flex items-center gap-1 text-lg">
-                <span className="font-semibold">Network:</span> Fast 4G
-                <Wifi className="mr-2 h-5 w-5 text-muted-foreground" />
-              </div>
-              <div className="text-lg">
-                <span className="font-semibold">Tested URL:</span>{" "}
-                {result.websiteUrl}
-              </div>
-              <div className="text-lg">
-                <span className="font-semibold">Note:</span>{" "}
-                Results may vary and are influenced by multiple factors. Run same test 2 times for better results.
-              </div>
-            </div>
-          </div>
-          <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 w-full md:p-8">
-            {metrics.map((metric) => (
-              <MetricCard key={metric.name} metric={metric} />
-            ))}
-          </div>
-        </div>
-      )}
+  const ResultsGrid = result && (
+    <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+      {metrics.map((metric) => (
+        <MetricCard key={metric.name} metric={metric} />
+      ))}
     </div>
+  );
+
+  return (
+    <ModernLanding results={ResultsGrid} result={result}>
+      <InputForm setResult={setResult} />
+    </ModernLanding>
   );
 }
