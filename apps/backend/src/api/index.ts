@@ -9,6 +9,44 @@ import { REDIS_EXPIRY_TIME } from "../config/config";
 
 const router = express.Router();
 
+function timeAgo(date: Date): string {
+  const now = new Date();
+  const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+  let interval = Math.floor(seconds / 31536000);
+  if (interval > 1) return interval + "y ago";
+
+  interval = Math.floor(seconds / 2592000);
+  if (interval > 1) return interval + "m ago";
+
+  interval = Math.floor(seconds / 86400);
+  if (interval > 1) return interval + "d ago";
+
+  interval = Math.floor(seconds / 3600);
+  if (interval > 1) return interval + "h ago";
+
+  interval = Math.floor(seconds / 60);
+  if (interval > 1) return interval + "m ago";
+
+  return Math.floor(seconds) + "s ago";
+}
+
+function formatValue(value: number, unit: string): string {
+  if (unit === "ms") {
+    if (value >= 1000) {
+      return `${(value / 1000).toFixed(2)}s`;
+    }
+    return `${value.toFixed(1)}ms`;
+  } else if (unit === "bytes") {
+    if (value >= 1024 * 1024) {
+      return `${(value / (1024 * 1024)).toFixed(2)}MB`;
+    } else {
+      return `${(value / 1024).toFixed(2)}KB`;
+    }
+  }
+  return value.toString();
+}
+
 router.get<{}, MessageResponse>("/", (req, res) => {
   res.json({
     message: "API - 👋🌎🌍🌏",
@@ -178,7 +216,6 @@ router.get("/tests/:id/results", async (req, res) => {
     });
   }
 });
-export default router;
 
 router.get("/recent-tests", async (req, res) => {
   const result = await JobModel.find(
@@ -194,15 +231,20 @@ router.get("/recent-tests", async (req, res) => {
     });
 
   const recentTests = result.map((job: any) => {
+    const timestamp = timeAgo(job.completedAt);
+    const loadTime = formatValue(job.results?.performanceTest?.loadTime, "ms");
     return {
-      loadTime: job.results?.performanceTest?.loadTime,
-      completedAt: job.completedAt,
+      loadTime,
+      timestamp,
       id: job._id,
       websiteUrl: job.websiteUrl,
       region: job.region,
     };
   });
+
   res.json({
     recentTests: recentTests,
   });
 });
+
+export default router;
