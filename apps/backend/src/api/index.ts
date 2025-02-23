@@ -179,3 +179,29 @@ router.get("/tests/:id/results", async (req, res) => {
   }
 });
 export default router;
+
+router.get("/recent-tests", async (req, res) => {
+  const result = await JobModel.find(
+    { status: "completed" },
+    { results: 1, completedAt: 1, websiteUrl: 1 }
+  )
+    .limit(3)
+    .sort({ completedAt: -1 })
+    .populate({
+      path: "results.performanceTest",
+      select: "loadTime",
+      model: PerformanceTestResultModel,
+    });
+
+  const recentTests = result.map((job: any) => {
+    return {
+      loadTime: job.results?.performanceTest?.loadTime,
+      completedAt: job.completedAt,
+      id: job._id,
+      websiteUrl: job.websiteUrl,
+    };
+  });
+  res.json({
+    recentTests: recentTests,
+  });
+});
