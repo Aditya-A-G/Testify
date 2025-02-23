@@ -27,6 +27,7 @@ const RecentTests = () => {
       setRecentTests(data.recentTests);
     };
 
+    fetchRecentTests();
     const intervalId = setInterval(fetchRecentTests, 60000);
     return () => clearInterval(intervalId);
   }, []);
