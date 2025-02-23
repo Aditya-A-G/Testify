@@ -183,7 +183,7 @@ export default router;
 router.get("/recent-tests", async (req, res) => {
   const result = await JobModel.find(
     { status: "completed" },
-    { results: 1, completedAt: 1, websiteUrl: 1 }
+    { results: 1, completedAt: 1, websiteUrl: 1, region: 1 }
   )
     .limit(3)
     .sort({ completedAt: -1 })
@@ -199,6 +199,7 @@ router.get("/recent-tests", async (req, res) => {
       completedAt: job.completedAt,
       id: job._id,
       websiteUrl: job.websiteUrl,
+      region: job.region,
     };
   });
   res.json({
